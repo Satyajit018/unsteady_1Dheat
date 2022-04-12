@@ -99,7 +99,7 @@ int main()
 		{
 			write_output << xn(ic)<< " " << phi(ic) << "\n";
 		}
-		
+		//making a comment
 	}
 	write_output.close();
 	return 0;
