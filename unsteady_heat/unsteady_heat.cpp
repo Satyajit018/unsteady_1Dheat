@@ -1,4 +1,5 @@
-
+//1D unsteady heat conduction 
+//Formulation taken from Prof Wagner ME424 course
 #include<Eigen/Sparse>
 #include<vector>
 #include <iostream>
@@ -7,34 +8,34 @@
 #include<fstream>
 using namespace Eigen;
 typedef Eigen::SparseMatrix<double> SparseMatrixXd; // declares a column-major sparse matrix type of double
-typedef Eigen::Triplet<double> T;
+//typedef Eigen::Triplet<double> T;
 
 int main()
 {
 	double L = 1.0; //length
 	double D = 1.0; //diffusion coefficient
 	double rho = 1.0; // density
-	double phiIC = 0.0; 
-	double phiL = 1.0;
-	double phiR = 0.0;
-	double dA = 1.0;
-	double totalTime = 0.5;
+	double phiIC = 0.0; //initial condition
+	double phiL = 1.0; //left BC
+	double phiR = 0.0; //Right BC
+	double dA = 1.0; //Area
+	double totalTime = 0.5; //Total simulation time
 
 	//Finite volume mesh solution parameters
-	int nc = 20;
-	double dt = 0.0005;
-	int theta = 0;
+	int nc = 20; //number of cell
+	double dt = 0.0005; //timestep
+	int theta = 0; // 0 for explicit and 1 for implicit
 
 	//set up mesh
 	double dx = L / double(nc); //cell width
-	VectorXd xn(nc);
+	VectorXd xn(nc); //location of the FV center
 	for (int ic = 0; ic < nc; ic++)
 	{
 		xn(ic) = ic * dx + dx / 2;
 	}
 
-	std::cout << xn << std::endl;
-
+	//std::cout << xn << std::endl;
+	//define the sparse matrices using Eigen
 	SparseMatrixXd matM(nc, nc);
 	SparseMatrixXd matK(nc, nc);
 	SparseMatrixXd LHS(nc, nc);
@@ -99,8 +100,7 @@ int main()
 		{
 			write_output << xn(ic)<< " " << phi(ic) << "\n";
 		}
-		//making a comment
-		//test branch in github
+
 	}
 	write_output.close();
 	return 0;
